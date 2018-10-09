@@ -1,0 +1,39 @@
+---
+# tasks file for docker
+- name: yum install yum-utils
+  yum: name=yum-utils state=present
+
+- name: yum install device-mapper-persistent-data
+  yum: name=device-mapper-persistent-data state=present
+
+- name: yum install lvm2
+  yum: name=lvm2 state=present
+
+- name: add docker-ce repository
+  shell: "yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo"
+  args:
+    chdir: "/etc/yum.repos.d"
+    creates: docker-ce.repo
+
+- name: yum install docker-ce
+  yum: name=docker-ce state=present
+
+- name: yum install python-pip
+  yum: name=python-pip state=present
+
+- name: pip upgrade
+  pip:
+    name: pip
+    state: latest
+
+- name: pip docker install
+  pip:
+    name: docker
+    state: latest
+
+- name: enable Docker service
+  systemd:
+    name: docker.service
+    state: restarted
+    daemon_reload: yes
+    enabled: yes

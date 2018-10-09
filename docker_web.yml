@@ -1,0 +1,9 @@
+---
+- name: install and configure the docker
+  hosts: all
+  remote_user: vagrant
+  become: yes
+  roles:
+    - common
+    - docker
+    - docker_web
