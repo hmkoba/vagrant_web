@@ -1,0 +1,21 @@
+---
+- name: docker image build
+  hosts: localhost
+  connection: local
+  become: yes
+  tasks:
+    - shell: "docker image build -t {{ type }} -f /home/vagrant/dockerfile_{{ image }} ."
+
+- name: docker run {{ type }}
+  hosts: localhost
+  connection: local
+  become: yes
+  roles:
+    - docker_run_{{ type }}
+
+- name: サービス起動 {{ type }}
+  hosts: docker_{{ type }}
+  connection: docker
+  become: yes
+  roles:
+    - docker_start_{{ type }}

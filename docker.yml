@@ -1,0 +1,39 @@
+---
+- name: install and configure the docker
+  hosts: all
+  remote_user: vagrant
+  become: yes
+  roles:
+    - common
+    - docker
+
+
+- name: copy ansible files for docker web
+  hosts: all
+  remote_user: vagrant
+  become: yes
+  vars:
+    - type: web
+    - image: web
+  roles:
+    - docker_ansible_files
+
+- name: copy ansible files for docker api
+  hosts: all
+  remote_user: vagrant
+  become: yes
+  vars:
+    - type: api
+    - image: web
+  roles:
+    - docker_ansible_files
+
+- name: copy ansible files for docker groonga
+  hosts: all
+  remote_user: vagrant
+  become: yes
+  vars:
+    - type: groonga
+    - image: groonga
+  roles:
+    - docker_ansible_files

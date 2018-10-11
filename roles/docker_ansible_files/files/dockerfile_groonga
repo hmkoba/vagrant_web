@@ -1,0 +1,21 @@
+FROM centos:7
+RUN yum -y update
+RUN yum -y install wget epel-release
+RUN yum reinstall -y glibc-common
+RUN yum -y install httpd
+
+RUN yum -y install sudo
+RUN yum clean all
+
+RUN yum install -y https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm
+RUN yum install -y --enablerepo=epel groonga
+RUN yum install -y --enablerepo=epel groonga-tokenizer-mecab
+RUN yum install -y --enablerepo=epel groonga-httpd
+
+# Create user
+RUN useradd docker
+RUN passwd -f -u docker
+RUN echo "docker ALL=(ALL) ALL" >> /etc/sudoers.d/docker
+
+ENV LANG ja_JP.UTF-8
+ENV LANGUAGE ja_JP:ja

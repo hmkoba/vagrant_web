@@ -1,0 +1,6 @@
+---
+- name: start httpd
+  service: name=httpd enabled=yes state=started
+
+- name: get code from git
+  git: repo=https://github.com/hmkoba/web.git dest=/var/www/html

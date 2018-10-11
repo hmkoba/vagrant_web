@@ -1,0 +1,91 @@
+---
+- name: copy common files
+  copy:
+    src: "{{ item }}"
+    dest: /home/vagrant/
+    owner: vagrant
+    group: vagrant
+    mode: 0755
+  with_items:
+      - "dockerfile_{{ image }}"
+      - "hosts"
+
+- template:
+    src: docker_main.j2
+    dest: /home/vagrant/docker_{{ type }}.yml
+    owner: vagrant
+    group: vagrant
+    mode: 0755
+
+##################################################################
+# copy docker run files
+##################################################################
+- name: check run directory {{ type }}
+  stat:
+    path: /home/vagrant/roles/docker_run_{{ type }}/tasks
+  register: fm
+
+- name: create run directory {{ type }}
+  file:
+    path: /home/vagrant/roles/docker_run_{{ type }}/tasks
+    state: directory
+    owner: vagrant
+    group: vagrant
+    mode: 0755
+  when: not fm.stat.exists
+
+- template:
+    src: docker_run.j2
+    dest: /home/vagrant/roles/docker_run_{{ type }}/tasks/main.yml
+    owner: vagrant
+    group: vagrant
+    mode: 0755
+
+##################################################################
+# copy docker service start files
+##################################################################
+- name: check start directory {{ type }}
+  stat:
+    path: /home/vagrant/roles/docker_start_{{ type }}/tasks
+  register: fm
+
+- name: create start directory {{ type }}
+  file:
+    path: /home/vagrant/roles/docker_start_{{ type }}/tasks
+    state: directory
+    owner: vagrant
+    group: vagrant
+    mode: 0755
+  when: not fm.stat.exists
+
+- template:
+    src: "{{ type }}/docker_start.j2"
+    dest: /home/vagrant/roles/docker_start_{{ type }}/tasks/main.yml
+    owner: vagrant
+    group: vagrant
+    mode: 0755
+
+
+##################################################################
+# copy ansible vars file
+##################################################################
+- name: check start directory {{ type }}
+  stat:
+    path: /home/vagrant/roles/docker_run_{{ type }}/vars
+  register: fm
+
+- name: create start directory {{ type }}
+  file:
+    path: /home/vagrant/roles/docker_run_{{ type }}/vars
+    state: directory
+    owner: vagrant
+    group: vagrant
+    mode: 0755
+  when: not fm.stat.exists
+
+- copy:
+    src: vars/docker_{{ type }}.yml
+    dest: /home/vagrant/roles/docker_run_{{ type }}/vars/main.yml
+    owner: vagrant
+    group: vagrant
+    mode: 0755

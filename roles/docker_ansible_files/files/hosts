@@ -1,4 +1,10 @@
 localhost
+
 [docker_web]
 local-tks001
+
+[docker_api]
 local-tkspostapi001
+
+[docker_groonga]
+local-grn001

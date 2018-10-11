@@ -1,0 +1,11 @@
+---
+- name: Dockerコンテナ起動
+  docker_container:
+    image: "{{ type }}"
+    {% raw %}name: "{{ item.name }}"
+    ports: "{{ item.ports }}"
+    detach: yes
+    tty: yes
+    privileged: yes
+    command: /sbin/init
+  with_items: "{{ hostlist }}"{% endraw %}

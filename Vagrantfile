@@ -23,7 +23,7 @@ Vagrant.configure("2") do |config|
     end
 
     server.vm.provision "ansible_local" do |ansible|
-      ansible.playbook = "docker_web.yml"
+      ansible.playbook = "docker.yml"
     end
 
   end
